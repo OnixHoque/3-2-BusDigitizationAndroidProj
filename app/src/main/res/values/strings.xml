@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">BusDigitizationPrototype</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="title_activity_start_journey">StartJourney</string>
+    <string-array name="locations">
+        <item>Malibagh</item>
+        <item>Ramna</item>
+        <item>Shahbagh</item>
+        <item>Science Lab</item>
+        <item>Azimpur</item>
+    </string-array>
+    <string-array name="sortbase">
+        <item>Estimated Time</item>
+        <item>Distance</item>
+        <item>Ticket Price</item>
+        <item>Rating</item>
+        <item>Stoppage</item>
+        <item>Hazard</item>
+    </string-array>
+    <string-array name="searchresult">
+        <item>Falgun 15tk 29mins 3 Stoppages 0 Hazards</item>
+        <item>Torongo 10tk 34mins 4 Stoppages 1 Hazards</item>
+    </string-array>
+    <string-array name="ticker">
+        <item>10:30PM   Extreme Jam at Ramna</item>
+        <item>10:24PM   Blockade at Shahbagh</item>
+    </string-array>
+    <string-array name="hazard">
+        <item>Blockade</item>
+        <item>Fire Incident</item>
+        <item>Road Accident</item>
+        <item>Broken Road</item>
+        <item>Exteme Jam</item>
+    </string-array>
+    <string-array name="time">
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+    </string-array>
+
+    <string name="title_activity_result">Result</string>
+    <string name="title_activity_during_journey">DuringJourney</string>
+    <string name="title_activity_feedback">Feedback</string>
+</resources>
