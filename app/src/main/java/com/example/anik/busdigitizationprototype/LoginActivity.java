@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
+import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                         continue;
                     }
                     line = ConnectionManager.in.readLine();
-                    if (line.equals("PING"))
+                    if (line.equals(ConnectionStrings.TEST_CONN))
                     {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                         break;
                     }
-                    else if (line.equals("LOGIN"))
+                    else if (line.equals(ConnectionStrings.LOGIN_SQ))
                     {
                         line = ConnectionManager.in.readLine();
                         if (line.equals("1"))
@@ -71,6 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getApplicationContext(), "Correct Infromation", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent("com.example.anik.busdigitizationprototype.StartJourney");
+                                    finish();
+                                    startActivity(intent);
                                 }
                             });
                         }
@@ -109,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectionManager.out.println("LOGIN");
+                ConnectionManager.out.println(ConnectionStrings.LOGIN_SQ);
                 ConnectionManager.out.println(txtUser.getText());
                 ConnectionManager.out.println(txtPass.getText());
                 new Thread(new ClientListener()).start();

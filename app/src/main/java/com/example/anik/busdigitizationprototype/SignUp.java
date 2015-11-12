@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
+import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
 
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class SignUp extends AppCompatActivity {
                 {
                     if (ConnectionManager.in == null) continue;
                     line = ConnectionManager.in.readLine();
-                    if (line.equals("SIGNUP"))
+                    if (line.equals(ConnectionStrings.SIGNUP_SQ))
                     {
                         line = ConnectionManager.in.readLine();
                         if (line.equals("1"))
@@ -81,7 +82,7 @@ public class SignUp extends AppCompatActivity {
         button_signup.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
-                ConnectionManager.out.println("SIGNUP");
+                ConnectionManager.out.println(ConnectionStrings.SIGNUP_SQ);
                 ConnectionManager.out.println(txtUser.getText());
                 ConnectionManager.out.println(txtPass.getText());
                 new Thread(new ClientListener()).start();
