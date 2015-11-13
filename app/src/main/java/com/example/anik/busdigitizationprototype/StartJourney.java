@@ -102,11 +102,11 @@ public class StartJourney extends AppCompatActivity {
                 if (strFrom.equals(strTo))
                     Toast.makeText(getApplicationContext(), "Current Location and Destination is same.", Toast.LENGTH_SHORT).show();
                 else
+                {
                     Toast.makeText(getApplicationContext(), "You want to go from " + strFrom + " to " + strTo, Toast.LENGTH_SHORT).show();
-
-
-                //Intent intent = new Intent("com.example.anik.busdigitizationprototype.Result");
-                //startActivity(intent);
+                    Intent intent = new Intent("com.example.anik.busdigitizationprototype.Result");
+                    startActivity(intent);
+                }
             }
 
         });

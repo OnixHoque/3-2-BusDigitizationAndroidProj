@@ -13,12 +13,11 @@
         <item>Azimpur</item>
     </string-array>
     <string-array name="sortbase">
-        <item>Estimated Time</item>
-        <item>Distance</item>
-        <item>Ticket Price</item>
-        <item>Rating</item>
-        <item>Stoppage</item>
-        <item>Hazard</item>
+        <item>Shortest Estimated Time</item>
+        <item>Lowest Ticket Price</item>
+        <item>Shortest Distance</item>
+        <item>Best Rating</item>
+        <item>Least Hazard Count</item>
     </string-array>
     <string-array name="searchresult">
         <item>Falgun 15tk 29mins 3 Stoppages 0 Hazards</item>
