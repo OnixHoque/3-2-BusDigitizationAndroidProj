@@ -12,9 +12,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Available Bus Services for:"
         android:id="@+id/textView9"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/spinner3"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="0dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,50 +23,42 @@
         android:text="Sort Result Using"
         android:id="@+id/textView10"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView9" />
+        android:layout_below="@+id/button7"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinner3"
         android:entries="@array/sortbase"
-        android:layout_below="@+id/textView10"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView9" />
+        android:minHeight="50dp"
+        android:layout_below="@+id/button6"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/textView10" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Journey"
         android:id="@+id/button6"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewResult"
-        android:layout_below="@+id/spinner3"
-        android:layout_alignEnd="@+id/button6"
-        android:layout_marginTop="10dp"
-        android:layout_above="@+id/button6" />
+        android:layout_below="@+id/textView9"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
         android:id="@+id/button7"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sort"
-        android:id="@+id/btnSort"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="false"
-        android:layout_alignTop="@+id/spinner3"
-        android:layout_alignBottom="@+id/spinner3" />
 
 </RelativeLayout>

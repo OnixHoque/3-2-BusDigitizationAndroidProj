@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 
@@ -10,38 +11,128 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
+import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
 import com.example.anik.busdigitizationprototype.Utility.ResultItems;
+import com.example.anik.busdigitizationprototype.Utility.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Result extends AppCompatActivity {
-    private static Button button_StartJourney;
+    private static Button button_StartJourney, button_Back;
+    private static Spinner spinnerSort;
+    private static TextView lblD;
+    public ResultListAdaptor rla;
     public List<ResultItems> lst = new ArrayList<ResultItems>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Utility.pd = new ProgressDialog(Result.this);
+        Utility.pd.setMessage("Please wait, loading results...");
+        Utility.pd.setCancelable(false);
+        Utility.pd.setInverseBackgroundForced(false);
+        Utility.pd.show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         OnClickButtonListener();
+        lblD = (TextView) findViewById(R.id.textView9);
+        lblD.setText("Available Bus Services for: " + Utility.UserData.destination);
 
-        lst.add(new ResultItems("Falgun", 20, 19, 4.0, 5, 0));
-
-        ResultListAdaptor rla = new ResultListAdaptor();
+        rla = new ResultListAdaptor();
         ListView lv = (ListView)findViewById(R.id.listViewResult);
         lv.setAdapter(rla);
-        lst.add(new ResultItems("Torongo", 15, 5, 3.0, 6, 1));
-        lst.add(new ResultItems("Bolaka", 5, 25, 4.4, 7, 2));
-        rla.notifyDataSetChanged();
+
+        ConnectionManager.out.println(ConnectionStrings.ROUTE_RESULT);
+        ConnectionManager.out.println(Utility.UserData.source);
+        ConnectionManager.out.println(Utility.UserData.destination);
+        new Thread(new ClientListener()).start();
+
+        //lst.add(new ResultItems("Falgun", 20, 19, 4.0, 5, 0));
+
+        //lst.add(new ResultItems("Torongo", 15, 5, 3.0, 6, 1));
+        //lst.add(new ResultItems("Bolaka", 5, 25, 4.4, 7, 2));
+        //rla.notifyDataSetChanged();
+        OnSpinnerChangeListener();
+
+    }
+
+    private class ClientListener implements Runnable{
+        @Override
+        public void run() {
+            String line;
+
+            try {
+                while(true)
+                {
+                    if (ConnectionManager.in == null) continue;
+                    line = ConnectionManager.in.readLine();
+                    if (line.equals(ConnectionStrings.TEST_CONN))
+                    {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //txt.setText("Machine Says Hi");
+                                Toast.makeText(getApplicationContext(), "Machine Says Hi", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                    }
+                    else if (line.equals(ConnectionStrings.ROUTE_RESULT))
+                    {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int len = 0;
+                                try {
+                                    len = Integer.valueOf(ConnectionManager.in.readLine());
+                                    for (int i = 0; i<len; i++)
+                                    {
+                                        String busName = ConnectionManager.in.readLine();
+                                        String rating = ConnectionManager.in.readLine();
+                                        String time = ConnectionManager.in.readLine();
+                                        String distance = ConnectionManager.in.readLine();
+                                        String price = ConnectionManager.in.readLine();
+                                        String hazard = ConnectionManager.in.readLine();
+                                        lst.add(new ResultItems(busName, Integer.parseInt(price), Double.parseDouble(time), Double.parseDouble(rating), Double.parseDouble(distance), Integer.parseInt(hazard)));
+                                    }
+                                    //*****TEST ONLY****
+                                    lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0));
+                                    lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1));
+                                    lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
+
+                                    rla.notifyDataSetChanged();
+                                    Utility.pd.dismiss();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                        break;
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     class ResultListAdaptor extends BaseAdapter{
@@ -86,19 +177,78 @@ public class Result extends AppCompatActivity {
             return convertView;
         }
     }
+    //Toast.makeText(getApplicationContext(), "Sort selected -> " + String.valueOf(position), Toast.LENGTH_LONG).show();
+    public void OnSpinnerChangeListener()
+    {
+        spinnerSort = (Spinner) findViewById(R.id.spinner3);
+        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getApplicationContext(), "Sort selected -> " + String.valueOf(position), Toast.LENGTH_LONG).show();
+                switch (position)
+                {
+                    case 0:
+                    {
+                        //Shortest time
+                        Collections.sort(lst, ResultItems.sortByTime);
+                        rla.notifyDataSetChanged();
+                        break;
+                    }
+                    case 1:
+                    {
+                        //lowest price
+                        Collections.sort(lst, ResultItems.sortByPrice);
+                        rla.notifyDataSetChanged();
+                        break;
+                    }
+                    case 2:
+                    {
+                        //Shortest Distance
+                        Collections.sort(lst, ResultItems.sortByDistance);
+                        rla.notifyDataSetChanged();
+                        break;
+                    }
+                    case 3:
+                    {
+                        //Best bus rating
+                        Collections.sort(lst, ResultItems.sortByRating);
+                        rla.notifyDataSetChanged();
+                        break;
+                    }
+                    case 4:
+                    {
+                        //Least hazard count
+                        Collections.sort(lst, ResultItems.sortByHazard);
+                        rla.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
     public void OnClickButtonListener()
     {
         button_StartJourney  = (Button) findViewById(R.id.button6);
-
+        button_Back  = (Button) findViewById(R.id.button7);
         button_StartJourney.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("com.example.anik.busdigitizationprototype.DuringJourney");
-                finish();
-                startActivity(intent);
+                //Intent intent = new Intent("com.example.anik.busdigitizationprototype.DuringJourney");
+                //finish();
+                //startActivity(intent);
             }
 
+        });
+        button_Back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
     }
 

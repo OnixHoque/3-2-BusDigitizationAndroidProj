@@ -40,28 +40,35 @@
         android:layout_marginLeft="10dp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="4.3 km"
         android:id="@+id/lblDist"
         android:layout_marginLeft="20dp"
         android:layout_below="@+id/lblBusCompany"
-        android:layout_toEndOf="@+id/lblTime"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentEnd="false"
+        android:layout_above="@+id/lblHazard"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="20 taka"
-        android:layout_marginLeft="20dp"
         android:id="@+id/lblPrice"
         android:layout_below="@+id/lblBusCompany"
-        android:layout_toEndOf="@+id/lblDist"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -70,6 +77,7 @@
         android:text="2 Hazard(s) on the way"
         android:id="@+id/lblHazard"
         android:layout_below="@+id/lblTime"
-        android:layout_alignStart="@+id/lblTime" />
+        android:layout_alignStart="@+id/lblTime"
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>

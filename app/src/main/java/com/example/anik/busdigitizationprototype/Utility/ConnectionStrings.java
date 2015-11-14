@@ -8,4 +8,5 @@ public class ConnectionStrings {
     public static String SIGNUP_SQ = "SIGNUP";        //followed by 'usr' and 'password'. Send 0 : Unsuccessful Signup; 	1 : Successful Signup
     public static String TEST_CONN = "PING";        //say hi
     public static String LOCATION_LIST = "LOCATIONS";
+    public static String ROUTE_RESULT = "ROUTE_RESULTS";
 }

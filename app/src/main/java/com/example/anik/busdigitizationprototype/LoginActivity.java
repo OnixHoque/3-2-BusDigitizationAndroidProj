@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
 import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
+import com.example.anik.busdigitizationprototype.Utility.Utility;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -71,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(), "Correct Infromation", Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getApplicationContext(), "Correct Infromation", Toast.LENGTH_LONG).show();
+                                    Utility.UserData.user_name = txtUser.getText().toString();
                                     Intent intent = new Intent("com.example.anik.busdigitizationprototype.StartJourney");
                                     finish();
                                     startActivity(intent);
@@ -84,6 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getApplicationContext(), "Invalid Infromation", Toast.LENGTH_LONG).show();
+                                    txtPass.setText("");
+                                    txtUser.setText("");
+                                    txtUser.requestFocus();
+
                                 }
                             });
                         }
@@ -93,6 +99,10 @@ public class LoginActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            catch (NullPointerException e1)
+            {
+                Toast.makeText(getApplicationContext(), "Connection could not be established", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -117,9 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                 ConnectionManager.out.println(txtUser.getText());
                 ConnectionManager.out.println(txtPass.getText());
                 new Thread(new ClientListener()).start();
-                txtPass.setText("");
-                txtUser.setText("");
-                txtUser.requestFocus();
 
                 //ConnectionManager.connectToServer cn = new ConnectionManager.connectToServer();
                 //cn.execute();

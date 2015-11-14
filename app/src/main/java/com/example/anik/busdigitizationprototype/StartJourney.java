@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +10,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
 import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
+import com.example.anik.busdigitizationprototype.Utility.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class StartJourney extends AppCompatActivity {
     private static Button button_showresult;
+    private static TextView txtGreetings;
     private Spinner from, to;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,9 @@ public class StartJourney extends AppCompatActivity {
         setContentView(R.layout.activity_start_journey);
         from = (Spinner) findViewById(R.id.cboStartJourneyFrom);
         to = (Spinner) findViewById(R.id.cboStartJourneyTo);
+
+        txtGreetings = (TextView) findViewById(R.id.lblGreetings);
+        txtGreetings.setText("Hello " + Utility.UserData.user_name);
 
         ConnectionManager.out.println(ConnectionStrings.LOCATION_LIST);
         new Thread(new ClientListener()).start();
@@ -77,7 +84,7 @@ public class StartJourney extends AppCompatActivity {
                                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 from.setAdapter(dataAdapter);
                                 to.setAdapter(dataAdapter);
-                                Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -103,7 +110,9 @@ public class StartJourney extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Current Location and Destination is same.", Toast.LENGTH_SHORT).show();
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "You want to go from " + strFrom + " to " + strTo, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "You want to go from " + strFrom + " to " + strTo, Toast.LENGTH_SHORT).show();
+                    Utility.UserData.source = strFrom;
+                    Utility.UserData.destination = strTo;
                     Intent intent = new Intent("com.example.anik.busdigitizationprototype.Result");
                     startActivity(intent);
                 }
