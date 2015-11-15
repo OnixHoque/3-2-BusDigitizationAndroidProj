@@ -26,6 +26,7 @@ public class StartJourney extends AppCompatActivity {
     private static Button button_showresult;
     private static TextView txtGreetings;
     private Spinner from, to;
+    public List<String> list = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +36,9 @@ public class StartJourney extends AppCompatActivity {
 
         txtGreetings = (TextView) findViewById(R.id.lblGreetings);
         txtGreetings.setText("Hello " + Utility.UserData.user_name);
-        Log.d("STARTJ_Error", "Sending code");
+        //Log.d("STARTJ_Error", "Sending code");
         ConnectionManager.out.println(ConnectionStrings.LOCATION_LIST);
-        Log.d("STARTJ_Error", "Starting Thread");
+        //Log.d("STARTJ_Error", "Starting Thread");
         new Thread(new ClientListener()).start();
         OnClickButtonListener();
 
@@ -67,35 +68,34 @@ public class StartJourney extends AppCompatActivity {
                     }
                     else if (line.equals(ConnectionStrings.LOCATION_LIST))
                     {
+                        //Log.d("STARTJ_Error", "Waiting for reply");
+                        int len = 0;
+
+                        //Log.d("STARTJ_Error", "Arraylist declared");
+                        try {
+                            len = Integer.valueOf(ConnectionManager.in.readLine());
+                            for (int i = 0; i<len; i++)
+                            {
+                                //Log.d("STARTJ_Error", "Line read");
+                                list.add(ConnectionManager.in.readLine());
+                            }
+                        }
+                        catch (NullPointerException e1) {
+                            //Log.d("STARTJ_Error", "Connection Lost");
+                            e1.printStackTrace();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Log.d("STARTJ_Error", "Waiting for reply");
-                                int len = 0;
-                                List<String> list = new ArrayList<String>();
-                                Log.d("STARTJ_Error", "Arraylist declared");
-                                try {
-                                    len = Integer.valueOf(ConnectionManager.in.readLine());
-                                    for (int i = 0; i<len; i++)
-                                    {
-                                        Log.d("STARTJ_Error", "Line read");
-                                        list.add(ConnectionManager.in.readLine());
-                                    }
-                                }
-                                catch (NullPointerException e1) {
-                                    Log.d("STARTJ_Error", "Connection Lost");
-                                    e1.printStackTrace();
-                                }
-                                catch (IOException e) {
-                                    e.printStackTrace();
-                                }
                                 //txt.setText("Machine Says Hi");
-                                Log.d("STARTJ_Error", "Data Adaptor set, total locations " + len );
+                                //Log.d("STARTJ_Error", "Data Adaptor set, total locations " + list.size() );
                                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(StartJourney.this, android.R.layout.simple_spinner_item, list);
                                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 from.setAdapter(dataAdapter);
                                 to.setAdapter(dataAdapter);
-
                                 //Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
                             }
                         });

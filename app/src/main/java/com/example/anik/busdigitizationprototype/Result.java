@@ -77,9 +77,8 @@ public class Result extends AppCompatActivity {
         //rla.notifyDataSetChanged();
         Collections.sort(lst, ResultItems.sortByTime);
         rla.notifyDataSetChanged();
-        Utility.pd.dismiss();
         OnSpinnerChangeListener();
-
+        Utility.pd.dismiss();
 
     }
 
@@ -106,35 +105,37 @@ public class Result extends AppCompatActivity {
                     }
                     else if (line.equals(ConnectionStrings.ROUTE_RESULT))
                     {
+
+                        int len = 0;
+                        try {
+                            len = Integer.valueOf(ConnectionManager.in.readLine());
+                            for (int i = 0; i<len; i++)
+                            {
+                                String busName = ConnectionManager.in.readLine();
+                                String rating = ConnectionManager.in.readLine();
+                                String time = ConnectionManager.in.readLine();
+                                String distance = ConnectionManager.in.readLine();
+                                String price = ConnectionManager.in.readLine();
+                                String hazard = ConnectionManager.in.readLine();
+                                lst.add(new ResultItems(busName, Integer.parseInt(price), Double.parseDouble(time), Double.parseDouble(rating), Double.parseDouble(distance), Integer.parseInt(hazard)));
+                            }
+                            //*****TEST ONLY****
+                            lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0));
+                            lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1));
+                            lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
+                            rla.notifyDataSetChanged();
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        /*
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                int len = 0;
-                                try {
-                                    len = Integer.valueOf(ConnectionManager.in.readLine());
-                                    for (int i = 0; i<len; i++)
-                                    {
-                                        String busName = ConnectionManager.in.readLine();
-                                        String rating = ConnectionManager.in.readLine();
-                                        String time = ConnectionManager.in.readLine();
-                                        String distance = ConnectionManager.in.readLine();
-                                        String price = ConnectionManager.in.readLine();
-                                        String hazard = ConnectionManager.in.readLine();
-                                        lst.add(new ResultItems(busName, Integer.parseInt(price), Double.parseDouble(time), Double.parseDouble(rating), Double.parseDouble(distance), Integer.parseInt(hazard)));
-                                    }
-                                    //*****TEST ONLY****
-                                    lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0));
-                                    lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1));
-                                    lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
-
-                                    rla.notifyDataSetChanged();
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
 
                             }
-                        });
+                        });*/
                         break;
                     }
                 }
@@ -179,9 +180,9 @@ public class Result extends AppCompatActivity {
 
             ResultItems result_item = lst.get(position);
             txtbusCompany.setText(result_item.getBusName());
-            txtTime.setText(String.valueOf(result_item.getTime())+ " min");
-            rb.setRating(((float)(result_item.getRating())));
-            txtDist.setText(String.valueOf(result_item.getDistance())+ " km");
+            txtTime.setText(String.valueOf("ETA " + result_item.getTime())+ " min");
+            rb.setRating(((float) (result_item.getRating())));
+            txtDist.setText(String.valueOf(result_item.getDistance()) + " km");
             txtPrice.setText(String.valueOf(result_item.getPrice())+ " taka");
             txtHaz.setText(String.valueOf(result_item.getHazardCount()) + " Hazard(s) on the way");
             return convertView;

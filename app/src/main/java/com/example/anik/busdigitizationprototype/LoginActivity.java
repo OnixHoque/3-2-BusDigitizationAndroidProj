@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
             If not working, prompt the user to enter new ip address. If working, very good.
                 If not working, exit.
          */
-        //ConnectionManager.ip_address = getResources().getString(R.string.default_ip);
-        ConnectionManager.ip_address = "10.1.1.39";
+        ConnectionManager.ip_address = getResources().getString(R.string.default_ip);
+        //ConnectionManager.ip_address = "10.1.1.39";
         Thread t = new Thread(new ConnectionManager());
         t.start();
         try {
