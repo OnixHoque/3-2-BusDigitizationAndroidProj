@@ -1,9 +1,11 @@
 package com.example.anik.busdigitizationprototype.Utility;
+import com.example.anik.busdigitizationprototype.LoginActivity;
+import com.example.anik.busdigitizationprototype.R;
 
-import android.os.AsyncTask;
-
+import android.util.Log;
 import java.io.*;
 import java.net.*;
+
 
 /**
  * Class that defines all  materials for establishing connection with the server
@@ -11,29 +13,38 @@ import java.net.*;
 
 public class ConnectionManager implements Runnable
 {
-
-
     public static Socket echoSocket;
     public static PrintWriter out;
     public static BufferedReader in;
-    static boolean connEstablished = false;
+    public static boolean connEstablished = false;
+    //String ip_address = "10.0.2.2";
+    public static String ip_address = "";
     public void run()
     {
-        try
-        {
-            InetAddress serverAddr = InetAddress.getByName("10.0.2.2");
-            echoSocket = new Socket(serverAddr, 8088);
-            out = new PrintWriter(echoSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-        }
-        catch (UnknownHostException e1)
-        {
-            e1.printStackTrace();
-        } catch (IOException e1)
-        {
-            e1.printStackTrace();
-        }
+        //while (connEstablished == false)
+        //{
+            try
+            {
+                InetAddress serverAddr = InetAddress.getByName(ip_address);
+                echoSocket = new Socket(serverAddr, 8088);
+                out = new PrintWriter(echoSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+                connEstablished = true;
+            }
+            catch (UnknownHostException e1)
+            {
+                e1.printStackTrace();
+                Log.d("ConnectionError con_man", "ip could not be resolved");
+                //System.exit(1);
+            } catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        //}
+
     }
+
+
 }
 /*
 public class ConnectionManager {

@@ -39,18 +39,20 @@ public class Result extends AppCompatActivity {
     private static Button button_StartJourney, button_Back;
     private static Spinner spinnerSort;
     private static TextView lblD;
+
     public ResultListAdaptor rla;
     public List<ResultItems> lst = new ArrayList<ResultItems>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
+
         Utility.pd = new ProgressDialog(Result.this);
         Utility.pd.setMessage("Please wait, loading results...");
         Utility.pd.setCancelable(false);
         Utility.pd.setInverseBackgroundForced(false);
         Utility.pd.show();
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result);
         OnClickButtonListener();
         lblD = (TextView) findViewById(R.id.textView9);
         lblD.setText("Available Bus Services for: " + Utility.UserData.destination);
@@ -62,14 +64,22 @@ public class Result extends AppCompatActivity {
         ConnectionManager.out.println(ConnectionStrings.ROUTE_RESULT);
         ConnectionManager.out.println(Utility.UserData.source);
         ConnectionManager.out.println(Utility.UserData.destination);
-        new Thread(new ClientListener()).start();
-
+        Thread t = new Thread(new ClientListener());
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //lst.add(new ResultItems("Falgun", 20, 19, 4.0, 5, 0));
-
         //lst.add(new ResultItems("Torongo", 15, 5, 3.0, 6, 1));
         //lst.add(new ResultItems("Bolaka", 5, 25, 4.4, 7, 2));
         //rla.notifyDataSetChanged();
+        Collections.sort(lst, ResultItems.sortByTime);
+        rla.notifyDataSetChanged();
+        Utility.pd.dismiss();
         OnSpinnerChangeListener();
+
 
     }
 
@@ -118,7 +128,7 @@ public class Result extends AppCompatActivity {
                                     lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
 
                                     rla.notifyDataSetChanged();
-                                    Utility.pd.dismiss();
+
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

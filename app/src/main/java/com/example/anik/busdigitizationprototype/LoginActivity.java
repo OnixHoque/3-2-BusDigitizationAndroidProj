@@ -1,8 +1,14 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,28 +16,51 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Looper;
 
 import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
 import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
 import com.example.anik.busdigitizationprototype.Utility.Utility;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
-import java.net.Socket;
 
 public class LoginActivity extends AppCompatActivity {
     private static Button button_signup;
     private static Button button_login;
     private static TextView txt;
     private static EditText txtUser, txtPass;
+    public static Context mContext;
+    //public static Handler UIHandler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        OnClickButtonListener();
-        //txt = (TextView)findViewById(R.id.textView);
+        mContext = this;
+
         txtUser = (EditText)findViewById(R.id.editText);
         txtPass = (EditText)findViewById(R.id.editText2);
-        new Thread(new ConnectionManager()).start();
+        /*
+        Set the default ip and check the connection. If working, very good.
+            If not working, prompt the user to enter new ip address. If working, very good.
+                If not working, exit.
+         */
+        //ConnectionManager.ip_address = getResources().getString(R.string.default_ip);
+        ConnectionManager.ip_address = "10.1.1.39";
+        Thread t = new Thread(new ConnectionManager());
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (ConnectionManager.connEstablished == false)
+        {
+            get_new_ip();
+        }
+
+        OnClickButtonListener();
     }
     public class ClientListener implements Runnable{
         @Override
@@ -164,4 +193,47 @@ public class LoginActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    void get_new_ip()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Default ip could not be resolved. Enter another Server Ip address:");
+        // Set up the input
+        final EditText input = new EditText(mContext);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ConnectionManager.ip_address = input.getText().toString();
+                Log.d("GOT IP ADDRESS:", ConnectionManager.ip_address);
+                Thread t = new Thread(new ConnectionManager());
+                t.start();
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (ConnectionManager.connEstablished == false)
+                {
+                    Toast.makeText(mContext, "Connection could not be established", Toast.LENGTH_LONG).show();
+                    dialog.cancel();
+                    System.exit(-11);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(mContext, "Connection could not be established", Toast.LENGTH_SHORT).show();
+                dialog.cancel();
+                System.exit(-1);
+            }
+        });
+        builder.show();
+    }
+
 }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,8 +35,9 @@ public class StartJourney extends AppCompatActivity {
 
         txtGreetings = (TextView) findViewById(R.id.lblGreetings);
         txtGreetings.setText("Hello " + Utility.UserData.user_name);
-
+        Log.d("STARTJ_Error", "Sending code");
         ConnectionManager.out.println(ConnectionStrings.LOCATION_LIST);
+        Log.d("STARTJ_Error", "Starting Thread");
         new Thread(new ClientListener()).start();
         OnClickButtonListener();
 
@@ -68,22 +70,32 @@ public class StartJourney extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Log.d("STARTJ_Error", "Waiting for reply");
                                 int len = 0;
                                 List<String> list = new ArrayList<String>();
+                                Log.d("STARTJ_Error", "Arraylist declared");
                                 try {
                                     len = Integer.valueOf(ConnectionManager.in.readLine());
                                     for (int i = 0; i<len; i++)
                                     {
+                                        Log.d("STARTJ_Error", "Line read");
                                         list.add(ConnectionManager.in.readLine());
                                     }
-                                } catch (IOException e) {
+                                }
+                                catch (NullPointerException e1) {
+                                    Log.d("STARTJ_Error", "Connection Lost");
+                                    e1.printStackTrace();
+                                }
+                                catch (IOException e) {
                                     e.printStackTrace();
                                 }
                                 //txt.setText("Machine Says Hi");
+                                Log.d("STARTJ_Error", "Data Adaptor set, total locations " + len );
                                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(StartJourney.this, android.R.layout.simple_spinner_item, list);
                                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 from.setAdapter(dataAdapter);
                                 to.setAdapter(dataAdapter);
+
                                 //Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -91,7 +103,12 @@ public class StartJourney extends AppCompatActivity {
                     }
                 }
 
-            } catch (IOException e) {
+            }
+            catch (NullPointerException e1) {
+                Log.d("STARTJ_Error", "Connection Lost ");
+                e1.printStackTrace();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -115,6 +132,8 @@ public class StartJourney extends AppCompatActivity {
                     Utility.UserData.destination = strTo;
                     Intent intent = new Intent("com.example.anik.busdigitizationprototype.Result");
                     startActivity(intent);
+
+
                 }
             }
 
