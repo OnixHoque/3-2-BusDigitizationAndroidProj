@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +36,7 @@ import com.example.anik.busdigitizationprototype.Utility.Utility;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Result extends AppCompatActivity {
+public class Result extends Activity {
     private static Button button_StartJourney, button_Back;
     private static Spinner spinnerSort;
     private static TextView lblD;
@@ -66,19 +67,18 @@ public class Result extends AppCompatActivity {
         ConnectionManager.out.println(Utility.UserData.destination);
         Thread t = new Thread(new ClientListener());
         t.start();
-        try {
+        OnSpinnerChangeListener();
+
+        /*try {
             t.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         //lst.add(new ResultItems("Falgun", 20, 19, 4.0, 5, 0));
         //lst.add(new ResultItems("Torongo", 15, 5, 3.0, 6, 1));
         //lst.add(new ResultItems("Bolaka", 5, 25, 4.4, 7, 2));
         //rla.notifyDataSetChanged();
-        Collections.sort(lst, ResultItems.sortByTime);
-        rla.notifyDataSetChanged();
-        OnSpinnerChangeListener();
-        Utility.pd.dismiss();
+
 
     }
 
@@ -123,7 +123,17 @@ public class Result extends AppCompatActivity {
                             lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0));
                             lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1));
                             lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
-                            rla.notifyDataSetChanged();
+                            //rla.notifyDataSetChanged();
+                            Collections.sort(lst, ResultItems.sortByTime);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //txt.setText("Machine Says Hi");
+                                    rla.notifyDataSetChanged();
+                                }
+                            });
+
+                            Utility.pd.dismiss();
 
 
                         } catch (IOException e) {

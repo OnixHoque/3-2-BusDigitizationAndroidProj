@@ -21,11 +21,14 @@
         android:stepSize=".1"
         android:isIndicator="true"
         android:numStars="5"
-        android:rating="3"
+        android:rating="3.5"
         android:layout_alignTop="@+id/lblBusCompany"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:progressTint="#77ba19"
+        android:progressBackgroundTint="@color/abc_background_cache_hint_selector_material_dark"
+        android:secondaryProgressTint="@color/abc_background_cache_hint_selector_material_dark" />
 
     <TextView
         android:layout_width="wrap_content"

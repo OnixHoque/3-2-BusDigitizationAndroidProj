@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class DuringJourney extends AppCompatActivity {
+public class DuringJourney extends Activity {
     private static Button button_Terminate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

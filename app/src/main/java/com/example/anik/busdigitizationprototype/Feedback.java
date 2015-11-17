@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class Feedback extends AppCompatActivity {
+public class Feedback extends Activity {
     private static Button button_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

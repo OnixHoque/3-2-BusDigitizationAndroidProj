@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
 
 import java.io.IOException;
 
-public class SignUp extends AppCompatActivity {
+public class SignUp extends Activity {
     private static Button button_finish;
     private static Button button_signup;
     private static EditText txtUser, txtPass;

@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,7 +27,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
     private static Button button_signup;
     private static Button button_login;
     private static TextView txt;
@@ -197,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
     void get_new_ip()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("Default ip could not be resolved. Enter another Server Ip address:");
+        builder.setTitle("Default IP Address could not be resolved. Enter another Server IP:");
         // Set up the input
         final EditText input = new EditText(mContext);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
@@ -208,6 +209,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                    //Toast.makeText(mContext, "Connection could not be established, Enter new IP or Press Cancel to exit", Toast.LENGTH_SHORT).show();
                 ConnectionManager.ip_address = input.getText().toString();
                 Log.d("GOT IP ADDRESS:", ConnectionManager.ip_address);
                 Thread t = new Thread(new ConnectionManager());
@@ -217,18 +219,21 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                Log.d("Login Debug", "Conn man returned with status " + ConnectionManager.connEstablished);
                 if (ConnectionManager.connEstablished == false)
                 {
-                    Toast.makeText(mContext, "Connection could not be established", Toast.LENGTH_LONG).show();
-                    dialog.cancel();
-                    System.exit(-11);
+                    System.exit(-1);
                 }
+                dialog.cancel();
+                Toast.makeText(mContext, "Connection established", Toast.LENGTH_SHORT).show();
+
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(mContext, "Connection could not be established", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Connection could not be established", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
                 System.exit(-1);
             }

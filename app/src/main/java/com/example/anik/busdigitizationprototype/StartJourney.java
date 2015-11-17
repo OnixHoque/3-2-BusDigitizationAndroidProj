@@ -1,5 +1,6 @@
 package com.example.anik.busdigitizationprototype;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartJourney extends AppCompatActivity {
+public class StartJourney extends Activity {
     private static Button button_showresult;
     private static TextView txtGreetings;
     private Spinner from, to;
@@ -128,12 +129,17 @@ public class StartJourney extends AppCompatActivity {
                 else
                 {
                     //Toast.makeText(getApplicationContext(), "You want to go from " + strFrom + " to " + strTo, Toast.LENGTH_SHORT).show();
+                    Utility.pd = new ProgressDialog(StartJourney.this);
+                    Utility.pd.setMessage("Please wait, loading results...");
+                    Utility.pd.setCancelable(false);
+                    Utility.pd.setInverseBackgroundForced(false);
+                    Utility.pd.show();
+
                     Utility.UserData.source = strFrom;
                     Utility.UserData.destination = strTo;
                     Intent intent = new Intent("com.example.anik.busdigitizationprototype.Result");
                     startActivity(intent);
-
-
+                    Utility.pd.dismiss();
                 }
             }
 
