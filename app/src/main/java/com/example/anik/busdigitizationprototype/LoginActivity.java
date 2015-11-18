@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -149,7 +150,20 @@ public class LoginActivity extends Activity {
             }
 
         });
-
+        txtPass.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    ConnectionManager.out.println(ConnectionStrings.LOGIN_SQ);
+                    ConnectionManager.out.println(txtUser.getText());
+                    ConnectionManager.out.println(txtPass.getText());
+                    new Thread(new ClientListener()).start();
+                    return true;
+                }
+                return false;
+            }
+        });
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
