@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+    android:longClickable="true"
+    android:layout_width="fill_parent" android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +17,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_toLeftOf="@+id/ratingBus" />
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -28,37 +37,41 @@
         android:layout_marginTop="5dp"
         android:progressTint="#77ba19"
         android:progressBackgroundTint="@color/abc_background_cache_hint_selector_material_dark"
-        android:secondaryProgressTint="@color/abc_background_cache_hint_selector_material_dark" />
+        android:secondaryProgressTint="@color/abc_background_cache_hint_selector_material_dark"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="19.2 min"
+        android:text="ETA 19.2 min"
         android:id="@+id/lblTime"
         android:layout_below="@+id/lblBusCompany"
         android:layout_alignStart="@+id/lblBusCompany"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_toLeftOf="@+id/lblPrice" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="4.3 km"
         android:id="@+id/lblDist"
-        android:layout_marginLeft="20dp"
-        android:layout_below="@+id/lblBusCompany"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:layout_alignParentEnd="false"
-        android:layout_above="@+id/lblHazard"
         android:layout_alignParentTop="false"
         android:layout_alignParentRight="false"
         android:layout_alignWithParentIfMissing="false"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal" />
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="right"
+        android:layout_alignRight="@+id/lblPrice"
+        android:layout_alignTop="@+id/lblStartTime"
+        android:minWidth="80dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,7 +84,10 @@
         android:layout_marginBottom="5dp"
         android:gravity="right"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="30dp" />
+        android:layout_marginRight="30dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:minWidth="80dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -79,8 +95,24 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="2 Hazard(s) on the way"
         android:id="@+id/lblHazard"
-        android:layout_below="@+id/lblTime"
+        android:layout_below="@+id/lblStartTime"
         android:layout_alignStart="@+id/lblTime"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_marginTop="5dp"
+        android:textSize="@dimen/abc_text_size_small_material"
+        android:layout_alignRight="@+id/lblDist" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Next Bus is at: 10:00:00"
+        android:id="@+id/lblStartTime"
+        android:layout_below="@+id/lblTime"
+        android:layout_alignStart="@+id/lblHazard"
+        android:layout_alignParentRight="false"
+        android:layout_toLeftOf="@+id/lblDist" />
 
 </RelativeLayout>

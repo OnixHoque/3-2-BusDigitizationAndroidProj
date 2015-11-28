@@ -9,4 +9,10 @@ public class ConnectionStrings {
     public static String TEST_CONN = "PING";        //say hi
     public static String LOCATION_LIST = "LOCATIONS";
     public static String ROUTE_RESULT = "ROUTE_RESULTS";
+    public static String WAY_POINTS = "WAYPOINTS";
+    public static String INSERT_HAZARD = "INSERT_HAZARD";
+    public static String RETRIVE_HAZARD = "RETRIVE_HAZARD";
+    public static String FEEDBACK = "FEEDBACK";
+    public static String LOG_START = "LOG_START";
+    public static String LOG_END = "LOG_END";
 }

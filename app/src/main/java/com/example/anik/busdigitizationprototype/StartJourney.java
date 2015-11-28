@@ -30,6 +30,7 @@ public class StartJourney extends Activity {
     public List<String> list = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Log.d("Act", "##MENU SHOWN##");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_journey);
         from = (Spinner) findViewById(R.id.cboStartJourneyFrom);
@@ -37,13 +38,9 @@ public class StartJourney extends Activity {
 
         txtGreetings = (TextView) findViewById(R.id.lblGreetings);
         txtGreetings.setText("Hello " + Utility.UserData.user_name);
-        //Log.d("STARTJ_Error", "Sending code");
         ConnectionManager.out.println(ConnectionStrings.LOCATION_LIST);
-        //Log.d("STARTJ_Error", "Starting Thread");
         new Thread(new ClientListener()).start();
         OnClickButtonListener();
-
-
     }
 
     private class ClientListener implements Runnable{

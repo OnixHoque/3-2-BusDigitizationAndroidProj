@@ -8,9 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+
+import com.example.anik.busdigitizationprototype.Utility.ConnectionManager;
+import com.example.anik.busdigitizationprototype.Utility.ConnectionStrings;
+import com.example.anik.busdigitizationprototype.Utility.Utility;
 
 public class Feedback extends Activity {
-    private static Button button_back;
+    private static Button button_submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +31,28 @@ public class Feedback extends Activity {
     }
     public void OnClickButtonListener()
     {
-        button_back  = (Button) findViewById(R.id.button10);
+        button_submit  = (Button) findViewById(R.id.button10);
 
-        button_back.setOnClickListener(new View.OnClickListener() {
+        button_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent("com.example.anik.busdigitizationprototype.StartJourney");
+                SeekBar sb1, sb2, sb3, sb4, sb5;
+                sb1 = (SeekBar)findViewById(R.id.sbComf);
+                sb2 = (SeekBar)findViewById(R.id.sbTicket);
+                sb3 = (SeekBar)findViewById(R.id.sbNoS);
+                sb4 = (SeekBar)findViewById(R.id.sbSeat);
+                sb5 = (SeekBar)findViewById(R.id.sbQos);
+
+                ConnectionManager.out.println(ConnectionStrings.FEEDBACK);
+                ConnectionManager.out.println(Utility.UserData.user_name);
+                ConnectionManager.out.println(Utility.UserData.bus_taken);
+                ConnectionManager.out.println(String.valueOf(sb1.getProgress()+1));
+                ConnectionManager.out.println(String.valueOf(sb2.getProgress()+1));
+                ConnectionManager.out.println(String.valueOf(sb3.getProgress()+1));
+                ConnectionManager.out.println(String.valueOf(sb4.getProgress()+1));
+                ConnectionManager.out.println(String.valueOf(sb5.getProgress()+1));
                 finish();
-                //startActivity(intent);
+
             }
         });
     }

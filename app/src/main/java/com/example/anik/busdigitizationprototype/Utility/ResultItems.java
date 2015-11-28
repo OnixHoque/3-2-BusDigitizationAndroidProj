@@ -8,6 +8,9 @@ public class ResultItems {
     double rating;
     double distance;
     int hazardCount;
+    String start_time;
+    String hazard;
+
 
     public ResultItems(String busName, int price, double time, double rating, double distance, int hazardCount) {
         this.busName = busName;
@@ -16,6 +19,25 @@ public class ResultItems {
         this.rating = rating;
         this.distance = distance;
         this.hazardCount = hazardCount;
+    }
+
+    public ResultItems(String busName, int price, double time, double rating, double distance, int hazardCount, String hazard, String start_time) {
+        this.busName = busName;
+        this.price = price;
+        this.time = time;
+        this.rating = rating;
+        this.distance = distance;
+        this.hazardCount = hazardCount;
+        this.start_time = start_time;
+        this.hazard = hazard;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public String getHazard() {
+        return hazard;
     }
 
     public String getBusName() {

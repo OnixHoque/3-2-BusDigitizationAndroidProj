@@ -10,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Give Feedback"
-        android:id="@+id/checkBox"
+        android:id="@+id/FeedBackCheckbox"
         android:checked="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/labelJourneyStatus"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -20,8 +20,9 @@
         android:layout_height="wrap_content"
         android:text="Terminate Journey"
         android:id="@+id/button8"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="false"
+        android:layout_alignEnd="@+id/RefreshButton"
+        android:layout_below="@+id/labelJourneyStatus" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,9 +30,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Things happneing in your path:"
         android:id="@+id/textView11"
-        android:layout_below="@+id/button8"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="36dp" />
+        android:layout_above="@+id/listViewHazList" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,8 +39,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Trouble in your journey? Report a hazard:"
         android:id="@+id/textView12"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/spinLocation"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,9 +49,10 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Location"
         android:id="@+id/textView13"
-        android:layout_below="@+id/textView12"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="19dp" />
+        android:layout_above="@+id/textView14"
+        android:layout_alignBaseline="@+id/spinLocation"
+        android:layout_alignTop="@+id/spinLocation" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,9 +60,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Hazard Type"
         android:id="@+id/textView14"
-        android:layout_below="@+id/textView13"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp" />
+        android:layout_alignBaseline="@+id/spinHazType"
+        android:layout_alignTop="@+id/spinHazType" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,56 +70,90 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Expire Time"
         android:id="@+id/textView15"
-        android:layout_below="@+id/textView14"
+        android:layout_alignTop="@+id/spinExpireTime"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
+        android:layout_alignBaseline="@+id/spinExpireTime" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner4"
-        android:layout_alignTop="@+id/textView13"
-        android:layout_above="@+id/textView14"
-        android:entries="@array/locations"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView14" />
+        android:id="@+id/spinLocation"
+        android:longClickable="true"
+        android:minHeight="30dp"
+        android:layout_above="@+id/spinHazType"
+        android:layout_alignStart="@+id/spinHazType"
+        android:layout_alignParentEnd="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner5"
-        android:layout_alignTop="@+id/textView14"
+        android:id="@+id/spinHazType"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView14"
-        android:layout_above="@+id/textView15"
+        android:layout_above="@+id/spinExpireTime"
         android:entries="@array/hazard"
-        android:layout_alignStart="@+id/spinner4" />
+        android:minHeight="30dp"
+        android:layout_toRightOf="@+id/textView14" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner6"
-        android:layout_alignTop="@+id/textView15"
+        android:id="@+id/spinExpireTime"
+        android:entries="@array/time"
+        android:layout_above="@+id/SubmitButton"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView14"
-        android:layout_alignBottom="@+id/textView15"
-        android:entries="@array/time" />
+        android:minHeight="30dp"
+        android:layout_toRightOf="@+id/textView15"
+        android:layout_alignStart="@id/spinHazType" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:id="@+id/button9"
-        android:layout_below="@+id/spinner6"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/SubmitButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/spinExpireTime" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView2"
-        android:layout_below="@+id/textView11"
+        android:id="@+id/listViewHazList"
+        android:layout_below="@+id/RefreshButton"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/textView12"
         android:layout_alignParentEnd="true"
-        android:entries="@array/ticker"/>
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/textView12"
+        android:backgroundTint="#b5ffffff" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:id="@+id/RefreshButton"
+        android:layout_below="@+id/button8"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="[Shahbagh to Azimpur in Falgun]"
+        android:id="@+id/labelJourneyStatus"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="No significant Hazard in your path"
+        android:id="@+id/HazardCountLabel"
+        android:layout_toStartOf="@+id/button8"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/listViewHazList"
+        android:layout_marginTop="20dp" />
 </RelativeLayout>

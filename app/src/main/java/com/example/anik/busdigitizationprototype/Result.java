@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,10 +40,10 @@ import java.util.List;
 public class Result extends Activity {
     private static Button button_StartJourney, button_Back;
     private static Spinner spinnerSort;
-    private static TextView lblD;
-
-    public ResultListAdaptor rla;
-    public List<ResultItems> lst = new ArrayList<ResultItems>();
+    private static TextView lblD, lblResCount;
+    private static ListView lv;
+    private static ResultListAdaptor rla;
+    private List<ResultItems> lst = new ArrayList<ResultItems>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +58,18 @@ public class Result extends Activity {
         OnClickButtonListener();
         lblD = (TextView) findViewById(R.id.textView9);
         lblD.setText("Available Bus Services for: " + Utility.UserData.destination);
-
+        lblResCount = (TextView) findViewById(R.id.lblResultCount);
         rla = new ResultListAdaptor();
-        ListView lv = (ListView)findViewById(R.id.listViewResult);
+        lv = (ListView)findViewById(R.id.listViewResult);
         lv.setAdapter(rla);
+        lv.setItemsCanFocus(false);
 
         ConnectionManager.out.println(ConnectionStrings.ROUTE_RESULT);
         ConnectionManager.out.println(Utility.UserData.source);
         ConnectionManager.out.println(Utility.UserData.destination);
         Thread t = new Thread(new ClientListener());
         t.start();
+        OnListViewEventsListener();
         OnSpinnerChangeListener();
 
         /*try {
@@ -90,7 +93,11 @@ public class Result extends Activity {
             try {
                 while(true)
                 {
-                    if (ConnectionManager.in == null) continue;
+                    if (ConnectionManager.in == null)
+                    {
+                        Log.d("Connection", "Connection Error");
+                        break;
+                    }
                     line = ConnectionManager.in.readLine();
                     if (line.equals(ConnectionStrings.TEST_CONN))
                     {
@@ -113,23 +120,30 @@ public class Result extends Activity {
                             {
                                 String busName = ConnectionManager.in.readLine();
                                 String rating = ConnectionManager.in.readLine();
-                                String time = ConnectionManager.in.readLine();
+                                String time = ConnectionManager.in.readLine();  //ETA
                                 String distance = ConnectionManager.in.readLine();
                                 String price = ConnectionManager.in.readLine();
-                                String hazard = ConnectionManager.in.readLine();
-                                lst.add(new ResultItems(busName, Integer.parseInt(price), Double.parseDouble(time), Double.parseDouble(rating), Double.parseDouble(distance), Integer.parseInt(hazard)));
+                                String hazard = ConnectionManager.in.readLine();    //count
+                                String hazard_desc = ConnectionManager.in.readLine();
+                                String start_time = ConnectionManager.in.readLine();
+                                lst.add(new ResultItems(busName, Integer.parseInt(price), Double.parseDouble(time), Double.parseDouble(rating), Double.parseDouble(distance), Integer.parseInt(hazard), hazard_desc, start_time));
+                                //Log.d("Result","hazard count: " +  hazard + ", desc: " + hazard_desc + ", start time: " + start_time);
+                                Log.d("Result", rating);
                             }
                             //*****TEST ONLY****
-                            lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0));
-                            lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1));
-                            lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2));
+                            //lst.add(new ResultItems("Falgun (Dummy)", 20, 19, 4.0, 5, 0, "", "10:00:00"));
+                            //lst.add(new ResultItems("Torongo (Dummy)", 15, 5, 3.0, 6, 1, "JAM", "12:00:00"));
+                            //lst.add(new ResultItems("Bolaka (Dummy)", 5, 25, 4.4, 7, 2, "JAM, Clogging", "09:00:00"));
                             //rla.notifyDataSetChanged();
+
                             Collections.sort(lst, ResultItems.sortByTime);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     //txt.setText("Machine Says Hi");
                                     rla.notifyDataSetChanged();
+                                    if (lst.isEmpty())
+                                        lblResCount.setText("No result found, please try again.");
                                 }
                             });
 
@@ -187,15 +201,24 @@ public class Result extends Activity {
             TextView txtDist = (TextView)convertView.findViewById(R.id.lblDist);
             TextView txtPrice = (TextView)convertView.findViewById(R.id.lblPrice);
             TextView txtHaz = (TextView)convertView.findViewById(R.id.lblHazard);
+            TextView txtStartTime = (TextView)convertView.findViewById(R.id.lblStartTime);
 
             ResultItems result_item = lst.get(position);
             txtbusCompany.setText(result_item.getBusName());
-            txtTime.setText(String.valueOf("ETA " + result_item.getTime())+ " min");
+            txtTime.setText(String.valueOf("ETA " + result_item.getTime()) + " min");
             rb.setRating(((float) (result_item.getRating())));
+            //Log.d("Result", "rating is " + String.valueOf(result_item.getRating()));
+
             txtDist.setText(String.valueOf(result_item.getDistance()) + " km");
             txtPrice.setText(String.valueOf(result_item.getPrice())+ " taka");
-            txtHaz.setText(String.valueOf(result_item.getHazardCount()) + " Hazard(s) on the way");
+            txtHaz.setText(String.valueOf(result_item.getHazard()));
+            txtStartTime.setText("Next bus is at " + result_item.getStart_time());
             return convertView;
+        }
+
+        public ResultItems getResultItem(int pos)
+        {
+            return lst.get(pos);
         }
     }
     //Toast.makeText(getApplicationContext(), "Sort selected -> " + String.valueOf(position), Toast.LENGTH_LONG).show();
@@ -252,6 +275,35 @@ public class Result extends Activity {
             }
         });
     }
+    public void OnListViewEventsListener()
+    {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //ResultItems ri = rla.getResultItem(position);
+                //Toast.makeText(Result.this,"You selected "+  ri.getBusName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ResultItems ri = rla.getResultItem(position);
+                Utility.UserData.bus_taken = ri.getBusName();
+                //Log.d("UserData", "["+ Utility.UserData.source+" to "+ Utility.UserData.destination +" in " + Utility.UserData.bus_taken +"]");
+                //
+                ConnectionManager.out.println(ConnectionStrings.LOG_START);
+                ConnectionManager.out.println(Utility.UserData.user_name);
+                ConnectionManager.out.println(Utility.UserData.source);
+                ConnectionManager.out.println(Utility.UserData.destination);
+                ConnectionManager.out.println(Utility.UserData.bus_taken);
+
+                Intent intent2 = new Intent("com.example.anik.busdigitizationprototype.DuringJourney");
+                finish();
+                startActivity(intent2);
+                return true;
+            }
+        });
+    }
     public void OnClickButtonListener()
     {
         button_StartJourney  = (Button) findViewById(R.id.button6);
@@ -268,6 +320,10 @@ public class Result extends Activity {
         button_Back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                //Intent intent = new Intent("com.example.anik.busdigitizationprototype.DuringJourney");
+                //finish();
+                //startActivity(intent);
                 finish();
             }
         });
