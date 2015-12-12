@@ -19,6 +19,11 @@ public class ConnectionManager implements Runnable
     public static boolean connEstablished = false;
     //String ip_address = "10.0.2.2";
     public static String ip_address = "";
+
+    /**
+     * This thread tries to establish connection between the phone and the server computer.
+     * If connection is set, connEstablished is set to true
+     */
     public void run()
     {
         //while (connEstablished == false)

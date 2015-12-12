@@ -3,6 +3,9 @@ import android.app.ProgressDialog;
 import android.widget.Toast;
 import android.app.Activity;
 
+/**
+ * This class contains the state of the user and a progressdialog box shown while loading the search results
+ */
 public class Utility {
 
     public static ProgressDialog pd;

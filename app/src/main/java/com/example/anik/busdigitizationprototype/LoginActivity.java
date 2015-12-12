@@ -72,7 +72,7 @@ public class LoginActivity extends Activity {
             try {
                 while(true)
                 {
-                    if (ConnectionManager.in == null)
+                    if (ConnectionManager.in == null || ConnectionManager.echoSocket.isConnected() == false)
                     {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -131,9 +131,15 @@ public class LoginActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            catch (NullPointerException e1)
+            catch (Exception e1)
             {
-                Toast.makeText(getApplicationContext(), "Connection could not be established", Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ConnectionManager.connEstablished = false;
+                        Toast.makeText(getApplicationContext(), "Connection could not be established", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
     }

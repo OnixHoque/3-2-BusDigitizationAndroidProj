@@ -56,7 +56,7 @@ public class DuringJourney extends Activity {
         //Log.d("JUserData", "[" + Utility.UserData.source + " to " + Utility.UserData.destination + " in " + Utility.UserData.bus_taken + "]");
         lblStat.setText("[" + Utility.UserData.source + " to " + Utility.UserData.destination + " in " + Utility.UserData.bus_taken + "]");
         OnClickButtonListener();
-        UpdateHazardList();
+        //UpdateHazardList();
     }
 
     void UpdateHazardList()
@@ -93,7 +93,7 @@ public class DuringJourney extends Activity {
                         });
                         break;
                     }
-                    if (line.equals(ConnectionStrings.INSERT_HAZARD))
+                    else if (line.equals(ConnectionStrings.INSERT_HAZARD))
                     {
                         String success = ConnectionManager.in.readLine();
                         if (success.equals("1"))
@@ -103,6 +103,7 @@ public class DuringJourney extends Activity {
                                 public void run() {
                                     //txt.setText("Machine Says Hi");
                                     Toast.makeText(getApplicationContext(), "Hazard successfully added", Toast.LENGTH_SHORT).show();
+                                    button_SubmitHazard.setEnabled(true);
                                 }
                             });
                         }
@@ -113,6 +114,7 @@ public class DuringJourney extends Activity {
                                 public void run() {
                                     //txt.setText("Machine Says Hi");
                                     Toast.makeText(getApplicationContext(), "Unexpired Hazard entry already present", Toast.LENGTH_SHORT).show();
+                                    button_SubmitHazard.setEnabled(true);
                                 }
                             });
                         }
@@ -151,6 +153,7 @@ public class DuringJourney extends Activity {
                                 //Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
                             }
                         });
+                        UpdateHazardList();
                         break;
                     }
                     else if (line.equals(ConnectionStrings.RETRIVE_HAZARD))
@@ -182,10 +185,12 @@ public class DuringJourney extends Activity {
                                 //Log.d("STARTJ_Error", "Data Adaptor set, total locations " + list.size() );
                                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(DuringJourney.this, android.R.layout.simple_list_item_1, haz_list);
                                 lstHazrd.setAdapter(dataAdapter);
+
                                 if (haz_list.isEmpty())
                                     lblHazCount.setText("No significant Hazard in your path");
                                 else
                                     lblHazCount.setText("");
+                                button_Refresh.setEnabled(true);
                                 //Toast.makeText(getApplicationContext(), "Data Adaptor set, total locations " + len , Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -234,6 +239,7 @@ public class DuringJourney extends Activity {
         button_Refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                button_Refresh.setEnabled(false);
                 UpdateHazardList();
             }
         });
@@ -245,7 +251,7 @@ public class DuringJourney extends Activity {
                 String hazard_type = cboHazType.getSelectedItem().toString();
                 String exp_time1 = cboTime.getSelectedItem().toString();
                 String exp_time = exp_time1.substring(0, exp_time1.length()-4);     //without ' min'
-
+                button_SubmitHazard.setEnabled(false);
                 ConnectionManager.out.println(ConnectionStrings.INSERT_HAZARD);
                 ConnectionManager.out.println(Utility.UserData.user_name);
                 ConnectionManager.out.println(location);

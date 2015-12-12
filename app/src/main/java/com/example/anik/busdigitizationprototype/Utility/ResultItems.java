@@ -1,6 +1,9 @@
 package com.example.anik.busdigitizationprototype.Utility;
 import java.util.Comparator;
 
+/**
+ * This class is the data structure for the elements of Search Result
+ */
 public class ResultItems {
     String busName;
     int price;
